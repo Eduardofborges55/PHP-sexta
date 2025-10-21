@@ -15,6 +15,7 @@ Route::delete('/eventos/{id}', [EventoController::class, 'remover']);
 
 Route::prefix('eventos')->group(function () {
     Route::get('', [EventoController::class, 'Listar']);
+    Route::get('{id}', [EventoController::class, 'Buscar']);
     Route::post('', [EventoController::class, 'criar']);
     Route::delete('{id}', [EventoController::class, 'remover']);
 });

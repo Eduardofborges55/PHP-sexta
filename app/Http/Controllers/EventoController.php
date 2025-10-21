@@ -3,15 +3,28 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Evento;
+use Illuminate\Database\Eloquent\Model;
 
 class EventoController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function Listar()
+    public function Listar(Request $request)
     {
-        return ['Message' => 'Listando os eventos do sistema'];
+        $filtro = $request->get('filtro');
+     $consutar = Model::where('nome', '=', $filtro)->get();
+
+        $consulta = Evento::query();
+
+        $consulta->where('nome', 'like', '%' . $filtro . '%');
+
+        $eventos = $consulta->get();
+
+        dd($eventos);
+
+        return ['Message' => 'Listando os eventos do sistema', 'eventos' => $eventos->toArray()];
     }
 
     /**
@@ -36,5 +49,25 @@ class EventoController extends Controller
     public function update(Request $request, string $id)
     {
         //
+    }
+
+    public function Buscar(string $id)
+    {
+    // $consulta = Evento::query();
+
+    // $consulta->where('id', $id);
+    // $consulta->where('id', '>', 1);
+    
+    // $evento = $consulta->get()->first();
+
+    // $evento = Evento::find($id);
+
+    // $evento = Evento::findOrFail($id);
+
+    // $evento = Evemto::torawsql
+
+    $evento = Evento::findOrFail($id);
+
+    return ['Message' => 'Evento encontrado com ID: ' . $id, 'evento' => $evento->toArray()];   
     }
 }
