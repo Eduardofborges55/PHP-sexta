@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Evento;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Validation\Rule;
 
 class EventoController extends Controller
 {
@@ -14,11 +15,11 @@ class EventoController extends Controller
     public function Listar(Request $request)
     {
         $filtro = $request->get('filtro');
-     $consutar = Model::where('nome', '=', $filtro)->get();
+     $consulta = Model::where('id', '=', $filtro)->get();
 
         $consulta = Evento::query();
 
-        $consulta->where('nome', 'like', '%' . $filtro . '%');
+        $consulta->where('id', 'like', '%' . $filtro . '%');
 
         $eventos = $consulta->get();
 
@@ -32,6 +33,25 @@ class EventoController extends Controller
      */
     public function criar(Request $request)
     {
+        $validado = $request->validate([
+            'nome' => [['required', 'string', 'min:3']],
+            'data_inicio' => [
+                'required', 
+                Rule::date()->format('Y-m-d H:i:s')
+            ],
+            'data_fim' => [
+                'required', 
+                Rule::date()->after('data_inicio')->format('Y-m-d H:i:s'),
+                'after:data_inicio'
+            ],
+        ]);
+
+        $evento = new Evento();
+        $evento->nome = $validado['nome'];
+        $evento->data_inicio = $validado['data_inicio'];
+        $evento->data_fim = $validado['data_fim'];
+        $evento->save();
+
         return ['Message' => 'Criando um novo evento no sistema'];
     }
 
@@ -57,10 +77,10 @@ class EventoController extends Controller
 
     // $consulta->where('id', $id);
     // $consulta->where('id', '>', 1);
-    
-    // $evento = $consulta->get()->first();
 
-    // $evento = Evento::find($id);
+    // $ingressos = $consulta->get()->first();
+
+    // $ingressos = Evento::find($id);
 
     // $evento = Evento::findOrFail($id);
 
@@ -70,4 +90,7 @@ class EventoController extends Controller
 
     return ['Message' => 'Evento encontrado com ID: ' . $id, 'evento' => $evento->toArray()];   
     }
+
+
 }
+

@@ -4,11 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Evento extends Model
+class Ingressos extends Model
 {
-    protected $table = 'eventos';
+    protected $table = 'ingressos';
     protected $primaryKey = 'id';
-    //public $timestamps = false;
+    public $timestamps = false;
     // created_at and updated_at são desativados
     // created at e updated at are disabled
     // created_at e updated_at = boa pratica criar!
