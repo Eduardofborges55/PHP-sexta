@@ -39,6 +39,7 @@ Route::prefix('eventos')->group(function () {
         Route::post('', [IngressosController::class, 'criarIngressos']);
         Route::delete('{evento_id}', [IngressosController::class, 'removerIngressos']);
         Route::put('{evento_id}', [IngressosController::class, 'updateIngressos']);
+        Route::get('todos', [IngressosController::class, 'listarTodosIngressos']);
     });
 ?>
 
