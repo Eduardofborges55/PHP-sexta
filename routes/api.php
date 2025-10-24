@@ -13,13 +13,15 @@ Route::get('/user', function (Request $request) {
 Route::get('/eventos', [EventoController::class, 'Listar']);
 Route::post('/eventos', [EventoController::class, 'criar']);
 Route::delete('/eventos/{id}', [EventoController::class, 'remover']);
+Route::put('/eventos/{id}', [EventoController::class, 'update']);
 
 Route::prefix('eventos')->group(function () {
     Route::get('', [EventoController::class, 'Listar']);
     Route::get('{id}', [EventoController::class, 'Buscar']);
     Route::post('', [EventoController::class, 'criar']);
-    Route::delete('{id}', [EventoController::class, 'remover']);
-
+    Route::delete('/ingressos/{id}', [EventoController::class, 'remover']);
+    Route::put('{id}', [EventoController::class, 'update']);
+});
 
 
     Route::get('/ingressos', [IngressosController::class, 'listarIngressos']);
@@ -38,7 +40,5 @@ Route::prefix('eventos')->group(function () {
         Route::delete('{evento_id}', [IngressosController::class, 'removerIngressos']);
         Route::put('{evento_id}', [IngressosController::class, 'updateIngressos']);
     });
-});
-
 ?>
 

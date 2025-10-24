@@ -91,6 +91,55 @@ class EventoController extends Controller
     return ['Message' => 'Evento encontrado com ID: ' . $id, 'evento' => $evento->toArray()];   
     }
 
+    function BuscarTodos()
+    {
+        $eventos = Evento::all();
 
+        return ['Message' => 'Listando todos os eventos', 'eventos' => $eventos->toArray()];   
+    }
+
+    function deletarEventos(string $id)
+    {
+        $evento = Evento::findOrFail($id);
+        $evento->delete();
+
+        return ['Message' => 'Evento deletado com ID: ' . $id];   
+    }
+
+    function atualizarEventos(Request $request, string $id)
+    {
+        $validado = $request->validate([
+            'nome' => [['sometimes', 'required', 'string', 'min:3']],
+            'data_inicio' => [
+                'sometimes',
+                'required', 
+                Rule::date()->format('Y-m-d H:i:s')
+            ],
+            'data_fim' => [
+                'sometimes',
+                'required', 
+                Rule::date()->after('data_inicio')->format('Y-m-d H:i:s'),
+                'after:data_inicio'
+            ],
+        ]);
+
+        $evento = Evento::findOrFail($id);
+
+        if (isset($validado['nome'])) {
+            $evento->nome = $validado['nome'];
+        }
+        if (isset($validado['data_inicio'])) {
+            $evento->data_inicio = $validado['data_inicio'];
+        }
+        if (isset($validado['data_fim'])) {
+            $evento->data_fim = $validado['data_fim'];
+        }
+
+        $evento->save();
+
+        return ['Message' => 'Evento atualizado com ID: ' . $id];   
+    }
+
+    
 }
 
