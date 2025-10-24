@@ -1,45 +1,36 @@
-<?php 
+<?php
 
-use App\Http\Controllers\EventoController;
-use App\Http\Controllers\IngressosController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EventoController;
+use App\Http\Controllers\IngressosController;
 
+// 🔹 Rota simples para teste
 Route::get('/user', function (Request $request) {
-    return json_encode(['Message' => 'Minha API Laravel']);
+    return response()->json(['Message' => 'Minha API Laravel']);
 });
 
 
-Route::get('/eventos', [EventoController::class, 'Listar']);
-Route::post('/eventos', [EventoController::class, 'criar']);
-Route::delete('/eventos/{id}', [EventoController::class, 'remover']);
-Route::put('/eventos/{id}', [EventoController::class, 'update']);
-
+// =======================
+// 🎟️ ROTAS DE EVENTOS
+// =======================
 Route::prefix('eventos')->group(function () {
-    Route::get('', [EventoController::class, 'Listar']);
-    Route::get('{id}', [EventoController::class, 'Buscar']);
-    Route::post('', [EventoController::class, 'criar']);
-    Route::delete('/ingressos/{id}', [EventoController::class, 'remover']);
-    Route::put('{id}', [EventoController::class, 'update']);
+    Route::get('', [EventoController::class, 'Listar']);          // Listar todos os eventos
+    Route::get('{id}', [EventoController::class, 'Buscar']);       // Buscar evento por ID
+    Route::post('', [EventoController::class, 'criar']);           // Criar evento
+    Route::put('{id}', [EventoController::class, 'update']);       // Atualizar evento
+    Route::delete('{id}', [EventoController::class, 'remover']);   // Remover evento
 });
 
 
-    Route::get('/ingressos', [IngressosController::class, 'listarIngressos']);
-
-    Route::post('/ingressos', [IngressosController::class, 'criarIngressos']);
-
-    Route::get('/ingressos/{evento_id}', [IngressosController::class, 'BuscarIngressos']);
-
-    Route::delete('/ingressos/{evento_id}', [IngressosController::class, 'removerIngressos']);
-    Route::put('/ingressos/{evento_id}', [IngressosController::class, 'updateIngressos']);
-
-    Route::prefix('ingressos')->group(function () {
-        Route::get('', [IngressosController::class, 'listarIngressos']);
-        Route::get('{evento_id}', [IngressosController::class, 'BuscarIngressos']);
-        Route::post('', [IngressosController::class, 'criarIngressos']);
-        Route::delete('{evento_id}', [IngressosController::class, 'removerIngressos']);
-        Route::put('{evento_id}', [IngressosController::class, 'updateIngressos']);
-        Route::get('todos', [IngressosController::class, 'listarTodosIngressos']);
-    });
-?>
-
+// =======================
+// 🎫 ROTAS DE INGRESSOS
+// =======================
+Route::prefix('ingressos')->group(function () {
+    Route::get('', [IngressosController::class, 'listarTodosIngressos']);     // Todos os ingressos
+    Route::get('evento/{evento_id}', [IngressosController::class, 'listarIngressosPorEvento']); // Ingressos por evento
+    Route::get('{id}', [IngressosController::class, 'buscarIngressoPorId']);  // Ingresso por ID
+    Route::post('', [IngressosController::class, 'criarIngressos']);          // Criar ingresso
+    Route::put('{id}', [IngressosController::class, 'atualizarIngressos']);   // Atualizar ingresso
+    Route::delete('{id}', [IngressosController::class, 'deletarIngressos']);  // Deletar ingresso
+});

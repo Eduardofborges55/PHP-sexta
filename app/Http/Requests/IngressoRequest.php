@@ -22,7 +22,7 @@ class IngressoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'preco' => ['required', 'numeric', 'min:0'],
+            'valor' => ['required', 'numeric', 'min:0'],
             'tipo' => ['required', 'string', 'in:inteiro,meia'],
             'evento_id' => ['required', 'integer', 'exists:eventos,id'],
         ];
