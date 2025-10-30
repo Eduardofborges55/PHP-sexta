@@ -12,7 +12,7 @@ class EventoController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function Listar(Request $request)
+    public function listar(Request $request)
     {
         $filtro = $request->get('filtro');
      $consulta = Model::where('id', '=', $filtro)->get();
@@ -66,39 +66,23 @@ class EventoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    
+
+    public function buscar(string $id) 
     {
-        //
-    }
-
-    public function Buscar(string $id)
-    {
-    // $consulta = Evento::query();
-
-    // $consulta->where('id', $id);
-    // $consulta->where('id', '>', 1);
-
-    // $ingressos = $consulta->get()->first();
-
-    // $ingressos = Evento::find($id);
-
-    // $evento = Evento::findOrFail($id);
-
-    // $evento = Evemto::torawsql
-
-    $evento = Evento::findOrFail($id);
+        $evento = Evento::findOrFail($id);
 
     return ['Message' => 'Evento encontrado com ID: ' . $id, 'evento' => $evento->toArray()];   
     }
 
-    function BuscarTodos()
+    function buscarTodos()
     {
         $eventos = Evento::all();
 
         return ['Message' => 'Listando todos os eventos', 'eventos' => $eventos->toArray()];   
     }
 
-    function deletarEventos(string $id)
+    function deletar(string $id)
     {
         $evento = Evento::findOrFail($id);
         $evento->delete();
@@ -106,7 +90,7 @@ class EventoController extends Controller
         return ['Message' => 'Evento deletado com ID: ' . $id];   
     }
 
-    function atualizarEventos(Request $request, string $id)
+    function atualizar(Request $request, string $id)
     {
         $validado = $request->validate([
             'nome' => [['sometimes', 'required', 'string', 'min:3']],

@@ -1,11 +1,10 @@
 <?php
 
 namespace App\Http\Requests;
-use Illuminate\Validation\Rule;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class EventoRequest extends FormRequest
+class VendaRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,16 +22,10 @@ class EventoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nome' => ['required', 'string', 'min:3'],
-            'data_inicio' => [
-                'required',
-                Rule::date()->format('Y-m-d H:i:s')
-            ],
-            'data_fim' => [
-                'required',
-                Rule::date()->after('data_inicio')->format('Y-m-d H:i:s'),
-                'after:data_inicio'
-            ],
+            'evento_id' => ['required', 'integer', 'exists:eventos,id'],
+            'ingresso_id' => ['required', 'integer', 'exists:ingressos,id'],
+            'valor' => ['required', 'numeric', 'min:0'],
+            'documento_comprador' => ['required', 'string', 'max:20'],
         ];
     }
 }

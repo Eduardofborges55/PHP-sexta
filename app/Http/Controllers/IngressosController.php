@@ -67,20 +67,19 @@ class IngressosController extends Controller
         $validado = $request->validate([
             'evento_id' => ['required', 'integer', 'exists:eventos,id'],
             'tipo' => ['required', Rule::in(['inteiro', 'meia'])],
-            'valor' => ['nullable', 'numeric', 'min:0'],
+            'valor' => ['required', 'numeric', 'min:0'],
         ]);
 
-        $ingresso = Ingressos::create([
-            'evento_id' => $validado['evento_id'],
-            'tipo' => $validado['tipo'],
-            'valor' => $validado['valor'] ?? 0,
-        ]);
 
-        return response()->json([
-            'message' => 'Ingresso criado com sucesso!',
-            'ingresso' => $ingresso
-        ], 201);
-    }
+        $ingresso = new Ingressos();
+        $ingresso->evento_id = $validado['evento_id'];
+        $ingresso->tipo = $validado['tipo'];
+        $ingresso->valor = $validado['valor'];
+        $ingresso->save();
+
+        return ['Message' => 'Ingresso criado com sucesso!'];
+    }      
+    
 
     /**
      * Atualizar um ingresso existente
@@ -95,12 +94,19 @@ class IngressosController extends Controller
             'valor' => ['nullable', 'numeric', 'min:0'],
         ]);
 
-        $ingresso->update($validado);
+       $ingresso = new Ingressos();
+        if (isset($validado['evento_id'])) {
+            $ingresso->evento_id = $validado['evento_id'];
+        }
+        if (isset($validado['tipo'])) {
+            $ingresso->tipo = $validado['tipo'];
+        }
+        if (isset($validado['valor'])) {
+            $ingresso->valor = $validado['valor'];
+        }
+        $ingresso->save();
 
-        return response()->json([
-            'message' => 'Ingresso atualizado com sucesso!',
-            'ingresso' => $ingresso
-        ], 200);
+        return ['Message' => 'Ingresso atualizado com sucesso!'];
     }
 
     /**
